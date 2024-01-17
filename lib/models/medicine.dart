@@ -1,46 +1,71 @@
-class Medicine {
+class MedicationReminder {
   final List<dynamic>? notificationIDs;
-  final String? medicineName;
-  final int? dosage;
-  final String? medicineType;
-  final int? interval;
-  final String? startTime;
+  final String uniqueID;
+  final String medicineName;
+  dynamic dosage;
+  String? medicineType;
+  int interval;
+  String startTime;
+  String? treatmentDuration;
+  String? extInfo;
+  final String createdTime;
+  bool isStarred = false;
 
-  Medicine(
-      {this.notificationIDs,
-      this.medicineName,
-      this.dosage,
-      this.medicineType,
-      this.interval,
-      this.startTime});
+  MedicationReminder({
+    required this.isStarred,
+    this.extInfo,
+    required this.uniqueID,
+    this.treatmentDuration,
+    required this.notificationIDs,
+    required this.medicineName,
+    this.dosage,
+    this.medicineType,
+    required this.interval,
+    required this.startTime,
+    required this.createdTime,
+  });
 
   //Geters
-  String get getName => medicineName!;
-  int get getDosage => dosage!;
+  String get getUniqueID => uniqueID;
+  String get getMedicationName => medicineName;
+  dynamic get getDosage => dosage!;
   String get getType => medicineType!;
-  int get getInterval => interval!;
-  String get getStartTime => startTime!;
+  int get getInterval => interval;
+  String get getStartTime => startTime;
+  String get getTreatmentDuration => treatmentDuration!;
   List<dynamic> get getIDs => notificationIDs!;
+  String get getExtInfo => extInfo!;
+  bool get getIsStarred => isStarred;
 
   Map<String, dynamic> toJson() {
     return {
-      'ids': notificationIDs,
-      'name': medicineName,
-      'dosage': dosage,
-      'type': medicineType,
-      'interval': interval,
-      'start': startTime,
+      'Reminder IDs': notificationIDs,
+      'Unique ID': uniqueID,
+      'Medicine Name': medicineName,
+      'Dosage (mg)': dosage,
+      'Medicine Type': medicineType,
+      'Interval': interval,
+      'Start': startTime,
+      'Treatment Duration?': treatmentDuration,
+      'Extra Info': extInfo,
+      'isStarred': isStarred
     };
   }
 
-  factory Medicine.fromJson(Map<String, dynamic> parsedJson) {
-    return Medicine(
-      notificationIDs: parsedJson['ids'],
-      medicineName: parsedJson['name'],
-      dosage: parsedJson['dosage'],
-      medicineType: parsedJson['type'],
-      interval: parsedJson['interval'],
-      startTime: parsedJson['start'],
+  // Factory method to create MedicationReminder from Firestore data
+  factory MedicationReminder.fromFirestore(Map<String, dynamic> data) {
+    return MedicationReminder(
+      notificationIDs: data['notificationIDs'],
+      medicineName: data['medicationName'],
+      uniqueID: data["id"],
+      dosage: data['dosage'],
+      medicineType: data['medicineType'],
+      interval: data['interval'],
+      startTime: data['startTime'],
+      treatmentDuration: data['treatmentDuration'],
+      extInfo: data['extraInfo'],
+      isStarred: data['isStarred'],
+      createdTime: data['createdTime'],
     );
   }
 }
